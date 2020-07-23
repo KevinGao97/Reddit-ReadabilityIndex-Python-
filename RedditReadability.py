@@ -12,8 +12,9 @@ def sanitizeComments(submission):
     
     for topComments in submission.comments:
         try:
-            if topComments.body.find("[removed]") == -1:
-                allComments.append(topComments.body.replace('\n', ' '))
+            if topComments.body.find("[removed]") == -1 and topComments.body.find("[deleted]") == -1 :
+                comment = topComments.body.replace('\n', ' ')
+                allComments.append(comment)
         except AttributeError:
             print("Did not add the comment")
             continue
@@ -46,11 +47,11 @@ def computeColemanLiauIndex(topCommentList):
     #Prints the average Coleman-Liau Index of the thread 
     avgIndexScore = round(sum(avgColemanLiauIndex)/len(avgColemanLiauIndex))
     if avgIndexScore < 1 :
-        print("Average Coleman-Liau Index: Preschool")
+        print("Average Coleman-Liau Index of top comments: Preschool")
     elif avgIndexScore >= 1 and avgIndexScore <= 12:
-        print("Average Coleman-Liau Index: Grade "+ str(avgIndexScore))
+        print("Average Coleman-Liau Index of top comments: Grade "+ str(avgIndexScore))
     else:
-        print("Average Coleman-Liau Index: University level")
+        print("Average Coleman-Liau Index of top comments: University level")
 
 
     
@@ -62,6 +63,7 @@ The Main Function
 def main():
 
     
+    
     reddit = praw.Reddit(user_agent="Comment Extraction (by /u/USERNAME)",
                      client_id="CLIENT_ID", client_secret="CLIENT_SECRET",
                      username="USERNAME", password="PASSWORD")
@@ -69,9 +71,19 @@ def main():
     url = input("Please enter a reddit url: ")
     submission = reddit.submission(url=url)
 
+    #Calculate Coleman-Liau index of top comments
     topCommentList = sanitizeComments(submission)
     computeColemanLiauIndex(topCommentList)
 
+    #Calculate Coleman-Liau index of submission title 
+    submissionTitleIndex = colemanLiauIndex(submission.title)
+    if submissionTitleIndex < 1 :
+        print("Coleman-Liau Index of Title: Preschool")
+    elif submissionTitleIndex >= 1 and submissionTitleIndex <= 12:
+        print("Coleman-Liau Index of Title: Grade "+ str(submissionTitleIndex))
+    else:
+        print("Coleman-Liau Index of Title: University level")
+    
 
 main()
 
