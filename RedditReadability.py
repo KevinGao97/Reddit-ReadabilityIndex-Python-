@@ -46,14 +46,37 @@ def computeColemanLiauIndex(topCommentList):
     
     #Prints the average Coleman-Liau Index of the thread 
     avgIndexScore = round(sum(avgColemanLiauIndex)/len(avgColemanLiauIndex))
+    
+    
+    return avgIndexScore
+
+"""
+This function prints out all the information needed for the report.txt file which includes:
+submission title, submission upvote count, total number of comments in the submission, 
+the Coleman-Liau Index of the submission title, the average Coleman-Liau Index of all top comments 
+
+"""
+
+def outputAllInformation(avgIndexScore, submissionTitleIndex, submissionTitle, upvoteCount, numComments):
+
+    print(submissionTitle)
+    print("Number of upvotes: " + str(upvoteCount))
+    print("Number of comments: " + str(numComments))
+
+
+    if submissionTitleIndex < 1 :
+        print("Coleman-Liau Index of Title: Preschool")
+    elif submissionTitleIndex >= 1 and submissionTitleIndex <= 12:
+        print("Coleman-Liau Index of Title: Grade "+ str(submissionTitleIndex))
+    else:
+        print("Coleman-Liau Index of Title: University level")
+
     if avgIndexScore < 1 :
         print("Average Coleman-Liau Index of top comments: Preschool")
     elif avgIndexScore >= 1 and avgIndexScore <= 12:
         print("Average Coleman-Liau Index of top comments: Grade "+ str(avgIndexScore))
     else:
         print("Average Coleman-Liau Index of top comments: University level")
-
-
     
 
 """
@@ -71,19 +94,18 @@ def main():
     url = input("Please enter a reddit url: ")
     submission = reddit.submission(url=url)
 
+
     #Calculate Coleman-Liau index of top comments
     topCommentList = sanitizeComments(submission)
-    computeColemanLiauIndex(topCommentList)
+    avgTopCommentScore = computeColemanLiauIndex(topCommentList)
 
     #Calculate Coleman-Liau index of submission title 
     submissionTitleIndex = colemanLiauIndex(submission.title)
-    if submissionTitleIndex < 1 :
-        print("Coleman-Liau Index of Title: Preschool")
-    elif submissionTitleIndex >= 1 and submissionTitleIndex <= 12:
-        print("Coleman-Liau Index of Title: Grade "+ str(submissionTitleIndex))
-    else:
-        print("Coleman-Liau Index of Title: University level")
+
+    outputAllInformation(avgTopCommentScore, submissionTitleIndex, submission.title, submission.score, submission.num_comments)
     
 
-main()
+
+if __name__ == "__main__":
+    main()
 
