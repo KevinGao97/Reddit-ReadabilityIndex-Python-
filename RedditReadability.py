@@ -1,5 +1,31 @@
 import praw
 from ColemanLiauIndex import colemanLiauIndex
+import os.path
+import time
+
+
+"""
+This function takes in a text file that contains only reddit links, separated by a new line between each link. 
+The links are saved into a list and will be used to compute the Coleman-Liau Index of each link. 
+
+"""
+def openThreadsFile():
+
+    fileName = "threads.txt"
+    allLinks = []
+
+
+    if os.path.isfile(fileName):
+        with open(fileName, 'r') as fp:
+            line = fp.readline()
+            while line:
+                allLinks.append(line.strip())
+                line = fp.readline()
+                
+        return allLinks
+    else:
+        print("The file, 'threads.txt' was not found")
+
 
 """
 This function takes in the thread url top comments and sanitizes each comment, removing any trailing newline characters
@@ -50,6 +76,7 @@ def computeColemanLiauIndex(topCommentList):
     
     return avgIndexScore
 
+
 """
 This function prints out all the information in the terminal and writes to the report.txt file.
 The information includes: submission title, the submission id, submission upvote count,
@@ -57,7 +84,6 @@ total number of comments in the submission, the Coleman-Liau Index of the submis
 the average Coleman-Liau Index of all top comments 
 
 """
-
 def outputAllInformation(avgIndexScore, submissionTitleIndex, submissionTitle, upvoteCount, numComments, submissionId):
 
     filename = 'report.txt'
@@ -85,17 +111,18 @@ def outputAllInformation(avgIndexScore, submissionTitleIndex, submissionTitle, u
             
 
         if avgIndexScore < 1 :
-            print("Average Coleman-Liau Index of top comments: Preschool")
-            fp.write("Average Coleman-Liau Index of top comments: Preschool" + '\n')
+            print("Average Coleman-Liau Index of all top comments: Preschool")
+            fp.write("Average Coleman-Liau Index of all top comments: Preschool" + '\n')
         elif avgIndexScore >= 1 and avgIndexScore <= 12:
-            print("Average Coleman-Liau Index of top comments: Grade "+ str(avgIndexScore))
-            fp.write("Average Coleman-Liau Index of top comments: Grade "+ str(avgIndexScore)+ '\n')
+            print("Average Coleman-Liau Index of all top comments: Grade "+ str(avgIndexScore))
+            fp.write("Average Coleman-Liau Index of all top comments: Grade "+ str(avgIndexScore)+ '\n')
         else:
-            print("Average Coleman-Liau Index of top comments: University level")
-            fp.write("Average Coleman-Liau Index of top comments: University level " + '\n')
+            print("Average Coleman-Liau Index of all top comments: University level")
+            fp.write("Average Coleman-Liau Index of all top comments: University level " + '\n')
         
         fp.write('\n')
         fp.close()
+
 
 """
 The Main Function
@@ -104,25 +131,59 @@ The Main Function
 def main():
 
     
-    
     reddit = praw.Reddit(user_agent="Comment Extraction (by /u/USERNAME)",
                      client_id="CLIENT_ID", client_secret="CLIENT_SECRET",
                      username="USERNAME", password="PASSWORD")
 
-    url = input("Please enter a reddit url: ")
-    submission = reddit.submission(url=url)
-
-
-    #Calculate Coleman-Liau index of top comments
-    topCommentList = sanitizeComments(submission)
-    avgTopCommentScore = computeColemanLiauIndex(topCommentList)
-
-    #Calculate Coleman-Liau index of submission title 
-    submissionTitleIndex = colemanLiauIndex(submission.title)
-
-    #Outputs all information to terminal and writes to the report.txt file
-    outputAllInformation(avgTopCommentScore, submissionTitleIndex, submission.title, submission.score, submission.num_comments, submission.id)
     
+    if os.path.isfile("threads.txt"):
+        response = input("A threads.txt file is detected. Would you like to find the Coleman-Liau Index score of all links in the file? ")
+        if response.lower() in ['y', 'yes', 'n', 'no']:
+            if response.lower() in ['y', 'yes']:
+                allFileLinks = openThreadsFile()
+                for i in range (len(allFileLinks)):
+                    submission = reddit.submission(url=allFileLinks[i])
+                    #Calculate Coleman-Liau index of top comments
+                    topCommentList = sanitizeComments(submission)
+                    avgTopCommentScore = computeColemanLiauIndex(topCommentList)
+
+                    #Calculate Coleman-Liau index of submission title 
+                    submissionTitleIndex = colemanLiauIndex(submission.title)
+
+                    #Outputs all information to terminal and writes to the report.txt file
+                    outputAllInformation(avgTopCommentScore, submissionTitleIndex, submission.title, submission.score, submission.num_comments, submission.id)
+                    
+                    #Prevents multiple API requests made in less than 1 second 
+                    time.sleep(3)
+            else:
+                url = input("Please enter a reddit url: ")
+                submission = reddit.submission(url=url)
+
+
+                #Calculate Coleman-Liau index of top comments
+                topCommentList = sanitizeComments(submission)
+                avgTopCommentScore = computeColemanLiauIndex(topCommentList)
+
+                #Calculate Coleman-Liau index of submission title 
+                submissionTitleIndex = colemanLiauIndex(submission.title)
+
+                #Outputs all information to terminal and writes to the report.txt file
+                outputAllInformation(avgTopCommentScore, submissionTitleIndex, submission.title, submission.score, submission.num_comments, submission.id)
+        else:
+            print("Please answer with 'y', 'yes', 'n', 'no' ")
+
+    else:
+        url = input("Please enter a reddit url: ")
+        submission = reddit.submission(url=url)
+        #Calculate Coleman-Liau index of top comments
+        topCommentList = sanitizeComments(submission)
+        avgTopCommentScore = computeColemanLiauIndex(topCommentList)
+
+        #Calculate Coleman-Liau index of submission title 
+        submissionTitleIndex = colemanLiauIndex(submission.title)
+
+        #Outputs all information to terminal and writes to the report.txt file
+        outputAllInformation(avgTopCommentScore, submissionTitleIndex, submission.title, submission.score, submission.num_comments, submission.id)
 
 
 if __name__ == "__main__":
