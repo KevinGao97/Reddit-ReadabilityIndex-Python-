@@ -51,33 +51,51 @@ def computeColemanLiauIndex(topCommentList):
     return avgIndexScore
 
 """
-This function prints out all the information needed for the report.txt file which includes:
-submission title, submission upvote count, total number of comments in the submission, 
-the Coleman-Liau Index of the submission title, the average Coleman-Liau Index of all top comments 
+This function prints out all the information in the terminal and writes to the report.txt file.
+The information includes: submission title, the submission id, submission upvote count,
+total number of comments in the submission, the Coleman-Liau Index of the submission title,
+the average Coleman-Liau Index of all top comments 
 
 """
 
-def outputAllInformation(avgIndexScore, submissionTitleIndex, submissionTitle, upvoteCount, numComments):
+def outputAllInformation(avgIndexScore, submissionTitleIndex, submissionTitle, upvoteCount, numComments, submissionId):
 
-    print(submissionTitle)
-    print("Number of upvotes: " + str(upvoteCount))
-    print("Number of comments: " + str(numComments))
-
-
-    if submissionTitleIndex < 1 :
-        print("Coleman-Liau Index of Title: Preschool")
-    elif submissionTitleIndex >= 1 and submissionTitleIndex <= 12:
-        print("Coleman-Liau Index of Title: Grade "+ str(submissionTitleIndex))
-    else:
-        print("Coleman-Liau Index of Title: University level")
-
-    if avgIndexScore < 1 :
-        print("Average Coleman-Liau Index of top comments: Preschool")
-    elif avgIndexScore >= 1 and avgIndexScore <= 12:
-        print("Average Coleman-Liau Index of top comments: Grade "+ str(avgIndexScore))
-    else:
-        print("Average Coleman-Liau Index of top comments: University level")
+    filename = 'report.txt'
     
+    with open(filename, 'a') as fp:
+        print("Title: " + submissionTitle)
+        print("Submission id: "+ submissionId)
+        print("Number of upvotes: " + str(upvoteCount))
+        print("Number of comments: " + str(numComments))
+
+        fp.write("Title: " + submissionTitle + '\n')
+        fp.write("Submission id: "+ submissionId + '\n')
+        fp.write("Number of upvotes: " + str(upvoteCount) + '\n')
+        fp.write("Number of comments: " + str(numComments) + '\n')
+
+        if submissionTitleIndex < 1 :
+            print("Coleman-Liau Index of Title: Preschool")
+            fp.write("Coleman-Liau Index of Title: Preschool" + '\n')
+        elif submissionTitleIndex >= 1 and submissionTitleIndex <= 12:
+            print("Coleman-Liau Index of Title: Grade " + str(submissionTitleIndex))
+            fp.write("Coleman-Liau Index of Title: Grade " + str(submissionTitleIndex) + '\n')
+        else:
+            print("Coleman-Liau Index of Title: University level")
+            fp.write("Coleman-Liau Index of Title: University level " + '\n')
+            
+
+        if avgIndexScore < 1 :
+            print("Average Coleman-Liau Index of top comments: Preschool")
+            fp.write("Average Coleman-Liau Index of top comments: Preschool" + '\n')
+        elif avgIndexScore >= 1 and avgIndexScore <= 12:
+            print("Average Coleman-Liau Index of top comments: Grade "+ str(avgIndexScore))
+            fp.write("Average Coleman-Liau Index of top comments: Grade "+ str(avgIndexScore)+ '\n')
+        else:
+            print("Average Coleman-Liau Index of top comments: University level")
+            fp.write("Average Coleman-Liau Index of top comments: University level " + '\n')
+        
+        fp.write('\n')
+        fp.close()
 
 """
 The Main Function
@@ -102,7 +120,8 @@ def main():
     #Calculate Coleman-Liau index of submission title 
     submissionTitleIndex = colemanLiauIndex(submission.title)
 
-    outputAllInformation(avgTopCommentScore, submissionTitleIndex, submission.title, submission.score, submission.num_comments)
+    #Outputs all information to terminal and writes to the report.txt file
+    outputAllInformation(avgTopCommentScore, submissionTitleIndex, submission.title, submission.score, submission.num_comments, submission.id)
     
 
 
