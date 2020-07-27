@@ -125,6 +125,24 @@ def outputAllInformation(avgIndexScore, submissionTitleIndex, submissionTitle, u
 
 
 """
+Runs all functions above in computing, outputing, and writing to the report.txt file the Coleman Liau Index 
+
+"""
+def runColemanLiauIndex(submission):
+
+    #Calculate Coleman-Liau index of top comments
+    topCommentList = sanitizeComments(submission)
+    avgTopCommentScore = computeColemanLiauIndex(topCommentList)
+
+    #Calculate Coleman-Liau index of submission title 
+    submissionTitleIndex = colemanLiauIndex(submission.title)
+
+    #Outputs all information to terminal and writes to the report.txt file
+    outputAllInformation(avgTopCommentScore, submissionTitleIndex, submission.title, submission.score, submission.num_comments, submission.id)
+
+
+
+"""
 The Main Function
 
 """
@@ -135,7 +153,7 @@ def main():
                      client_id="CLIENT_ID", client_secret="CLIENT_SECRET",
                      username="USERNAME", password="PASSWORD")
 
-    
+        
     if os.path.isfile("threads.txt"):
         response = input("A threads.txt file is detected. Would you like to find the Coleman-Liau Index score of all links in the file? ")
         if response.lower() in ['y', 'yes', 'n', 'no']:
@@ -143,47 +161,25 @@ def main():
                 allFileLinks = openThreadsFile()
                 for i in range (len(allFileLinks)):
                     submission = reddit.submission(url=allFileLinks[i])
-                    #Calculate Coleman-Liau index of top comments
-                    topCommentList = sanitizeComments(submission)
-                    avgTopCommentScore = computeColemanLiauIndex(topCommentList)
-
-                    #Calculate Coleman-Liau index of submission title 
-                    submissionTitleIndex = colemanLiauIndex(submission.title)
-
-                    #Outputs all information to terminal and writes to the report.txt file
-                    outputAllInformation(avgTopCommentScore, submissionTitleIndex, submission.title, submission.score, submission.num_comments, submission.id)
                     
+                    runColemanLiauIndex(submission)
+
                     #Prevents multiple API requests made in less than 1 second 
                     time.sleep(3)
             else:
                 url = input("Please enter a reddit url: ")
                 submission = reddit.submission(url=url)
 
+                runColemanLiauIndex(submission)
 
-                #Calculate Coleman-Liau index of top comments
-                topCommentList = sanitizeComments(submission)
-                avgTopCommentScore = computeColemanLiauIndex(topCommentList)
-
-                #Calculate Coleman-Liau index of submission title 
-                submissionTitleIndex = colemanLiauIndex(submission.title)
-
-                #Outputs all information to terminal and writes to the report.txt file
-                outputAllInformation(avgTopCommentScore, submissionTitleIndex, submission.title, submission.score, submission.num_comments, submission.id)
         else:
             print("Please answer with 'y', 'yes', 'n', 'no' ")
 
     else:
         url = input("Please enter a reddit url: ")
         submission = reddit.submission(url=url)
-        #Calculate Coleman-Liau index of top comments
-        topCommentList = sanitizeComments(submission)
-        avgTopCommentScore = computeColemanLiauIndex(topCommentList)
-
-        #Calculate Coleman-Liau index of submission title 
-        submissionTitleIndex = colemanLiauIndex(submission.title)
-
-        #Outputs all information to terminal and writes to the report.txt file
-        outputAllInformation(avgTopCommentScore, submissionTitleIndex, submission.title, submission.score, submission.num_comments, submission.id)
+        
+        runColemanLiauIndex(submission)
 
 
 if __name__ == "__main__":
