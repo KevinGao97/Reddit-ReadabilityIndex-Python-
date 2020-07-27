@@ -2,6 +2,7 @@ import praw
 from ColemanLiauIndex import colemanLiauIndex
 import os.path
 import time
+import json
 
 
 """
@@ -148,10 +149,13 @@ The Main Function
 """
 def main():
 
-    
-    reddit = praw.Reddit(user_agent="Comment Extraction (by /u/USERNAME)",
-                     client_id="CLIENT_ID", client_secret="CLIENT_SECRET",
-                     username="USERNAME", password="PASSWORD")
+    #Loading in all the necessary information for praw from the 'credentials.json' file
+    with open("credentials.json") as fp:
+        params = json.load(fp)
+
+    reddit = praw.Reddit(user_agent="Computing the Coleman-Liau Index of top comments (by /u/" + params['username'] + ")",
+                     client_id=params['client_id'], client_secret=params['api_key'],
+                     username=params['username'], password=params['password'])
 
         
     if os.path.isfile("threads.txt"):
