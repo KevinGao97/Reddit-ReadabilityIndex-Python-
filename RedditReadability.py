@@ -150,8 +150,12 @@ The Main Function
 def main():
 
     #Loading in all the necessary information for praw from the 'credentials.json' file
-    with open("credentials.json") as fp:
-        params = json.load(fp)
+    try:
+        with open("credentials.json") as fp:
+            params = json.load(fp)
+    except FileNotFoundError:
+        print("The credentials.json file could not be found.")
+        exit(1)
 
     reddit = praw.Reddit(user_agent="Computing the Coleman-Liau Index of top comments (by /u/" + params['username'] + ")",
                      client_id=params['client_id'], client_secret=params['api_key'],
@@ -168,7 +172,7 @@ def main():
                     
                     runColemanLiauIndex(submission)
 
-                    #Prevents multiple API requests made in less than 1 second 
+                    #Prevents multiple API requests being made in less than 1 second 
                     time.sleep(3)
             else:
                 url = input("Please enter a reddit url: ")
