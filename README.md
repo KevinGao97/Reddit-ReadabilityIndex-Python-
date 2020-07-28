@@ -1,14 +1,17 @@
 # Reddit-ReadabilityIndex-Python-
 
-This python program computes the Coleman-Liau readability index for all the top comments of a reddit thread. 
+This python program computes the Coleman-Liau Index for all the top comments of a reddit thread. 
 The program uses the reddit api through PRAW. 
 
 To learn more about the Coleman-Liau Index:
 https://en.wikipedia.org/wiki/Coleman%E2%80%93Liau_index
 
+To learn more about PRAW:
+https://pypi.org/project/praw/
+
 ### Dependencies 
 ```
-Praw
+PRAW
 json
 ```
 ### Setup
