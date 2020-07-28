@@ -10,7 +10,6 @@ https://en.wikipedia.org/wiki/Coleman%E2%80%93Liau_index
 ```
 Praw
 json
-
 ```
 ### Setup
 1. Please ensure you are using Python version 3.6.0 or up.
