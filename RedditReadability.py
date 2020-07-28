@@ -141,7 +141,21 @@ def runColemanLiauIndex(submission):
     #Outputs all information to terminal and writes to the report.txt file
     outputAllInformation(avgTopCommentScore, submissionTitleIndex, submission.title, submission.score, submission.num_comments, submission.id)
 
+"""
+Gets the top 10 posts of a specified subreddit and runs the Coleman-Liau index for the top comments in the 10 posts.
 
+"""
+def subredditTop10Posts(reddit,subreddit):
+
+    subreddit = reddit.subreddit(subreddit)
+    for submission in subreddit.hot(limit=10):
+
+        runColemanLiauIndex(submission)
+
+        #Prevents multiple API requests being made in less than 1 second 
+        time.sleep(3)
+
+    
 
 """
 The Main Function
@@ -160,34 +174,56 @@ def main():
     reddit = praw.Reddit(user_agent="Computing the Coleman-Liau Index of top comments (by /u/" + params['username'] + ")",
                      client_id=params['client_id'], client_secret=params['api_key'],
                      username=params['username'], password=params['password'])
+    
+    print("Welcome to the Coleman Liau Index finder for top comments program! ")
+    option = input("Please enter from the following options: "+ '\n' + "A: Find the Coleman Liau Index for a single reddit post" +
+     '\n' + "B: Find the Coleman Liau Index from a text file containing a list of reddit links" +
+     '\n' + "C: Find the Coleman Liau Index from a specific subreddit" + '\n' + "Selection: ")
 
-        
-    if os.path.isfile("threads.txt"):
-        response = input("A threads.txt file is detected. Would you like to find the Coleman-Liau Index score of all links in the file? ")
-        if response.lower() in ['y', 'yes', 'n', 'no']:
-            if response.lower() in ['y', 'yes']:
-                allFileLinks = openThreadsFile()
-                for i in range (len(allFileLinks)):
-                    submission = reddit.submission(url=allFileLinks[i])
-                    
-                    runColemanLiauIndex(submission)
-
-                    #Prevents multiple API requests being made in less than 1 second 
-                    time.sleep(3)
-            else:
-                url = input("Please enter a reddit url: ")
-                submission = reddit.submission(url=url)
-
-                runColemanLiauIndex(submission)
-
-        else:
-            print("Please answer with 'y', 'yes', 'n', 'no' ")
-
-    else:
+    if option in ['a', 'A']:
         url = input("Please enter a reddit url: ")
         submission = reddit.submission(url=url)
         
         runColemanLiauIndex(submission)
+
+    elif option in ['b', 'B']:
+
+        if os.path.isfile("threads.txt"):
+            response = input("A threads.txt file is detected. Would you like to find the Coleman-Liau Index score of all links in the file? ")
+            if response.lower() in ['y', 'yes', 'n', 'no']:
+                if response.lower() in ['y', 'yes']:
+                    allFileLinks = openThreadsFile()
+                    for i in range (len(allFileLinks)):
+                        submission = reddit.submission(url=allFileLinks[i])
+                        
+                        runColemanLiauIndex(submission)
+
+                        #Prevents multiple API requests being made in less than 1 second 
+                        time.sleep(3)
+                else:
+                    url = input("Please enter a reddit url: ")
+                    submission = reddit.submission(url=url)
+
+                    runColemanLiauIndex(submission)
+
+            else:
+                print("Please answer with 'y', 'yes', 'n', 'no' ")
+
+        else:
+            print("The threads.txt file was not detected, reverting to finding the Coleman Liau Index from a single reddit post.")
+            url = input("Please enter a reddit url: ")
+            submission = reddit.submission(url=url)
+            
+            runColemanLiauIndex(submission)
+
+    elif option in ['c', 'C']:
+
+        subreddit = input("Which subreddit would you like access? ")
+        subredditTop10Posts(reddit, subreddit)
+    
+    else:
+        print("Not a valid selection.")
+    
 
 
 if __name__ == "__main__":
