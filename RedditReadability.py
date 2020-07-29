@@ -27,6 +27,7 @@ def openThreadsFile():
         return allLinks
     else:
         print("The file, 'threads.txt' was not found")
+        
 
 
 """
@@ -153,7 +154,7 @@ Gets the top 10 posts of a specified subreddit and runs the Coleman-Liau index f
 
 """
 def subredditTop10Posts(reddit,subreddit):
-
+    
     #Stores the specified subreddit information 
     subreddit = reddit.subreddit(subreddit)
 
