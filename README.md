@@ -21,6 +21,7 @@ json
 ### Setup
 1. Please ensure you are using Python version 3.6.0 or up.
 2. To install the necessary dependencies, run the following in CMD or terminal: ```pip install -r requirements.txt ```
+3. Please setup praw before running the program through the following link: https://praw.readthedocs.io/en/latest/getting_started/authentication.html#oauth 
  
 
 ### Features
