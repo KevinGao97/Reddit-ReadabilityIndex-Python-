@@ -2,9 +2,11 @@
 
 This python program computes the Coleman-Liau Index for all the top comments of a reddit thread. 
 The program prompts the user from the following 3 options:\
+
 A. Checking the Coleman-Liau Index of all top comments from a given reddit link.\
 B. Checking the Coleman-Liau Index of all top comments through a text file containing reddit links, separated by newline. This file is named 'threads.txt'. \
 C. Finding the Coleman-Liau Index of all top comments from the top 10 submissions of an existing subreddit. \
+
 The program uses the reddit api through PRAW(Python Reddit API Wrapper). 
 
 To learn more about the Coleman-Liau Index:
