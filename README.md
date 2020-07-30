@@ -16,12 +16,13 @@ json
 ### Setup
 1. Please ensure you are using Python version 3.6.0 or up.
 2. To install the necessary dependencies, run the following in CMD or terminal: ```pip install -r requirements.txt ```
-3. Please setup praw before running the program through the following link: https://praw.readthedocs.io/en/latest/getting_started/authentication.html#oauth 
-4. When running the program, it will prompt from the following 3 options: \
+3. Please setup praw before running the program through the following link: https://praw.readthedocs.io/en/latest/getting_started/authentication.html#oauth
+4. Edit the 'credentials.json' file with the necessary information needed by PRAW. 
+5. When running the program, it will prompt from the following 3 options: \
  A. Checking the Coleman-Liau Index of all top comments from a given reddit link.\
  B. Checking the Coleman-Liau Index of all top comments through a text file containing reddit links, separated by newline. This file is named 'threads.txt'. \
  C. Finding the Coleman-Liau Index of all top comments from the top 10 submissions of an existing subreddit. \
-5. The program 
+
  
 
 ### Features
