@@ -1,11 +1,6 @@
 # Reddit-ReadabilityIndex-Python-
 
-This python program computes the Coleman-Liau Index for all the top comments of a reddit thread. 
-The program prompts the user from the following 3 options:\
-A. Checking the Coleman-Liau Index of all top comments from a given reddit link.\
-B. Checking the Coleman-Liau Index of all top comments through a text file containing reddit links, separated by newline. This file is named 'threads.txt'. \
-C. Finding the Coleman-Liau Index of all top comments from the top 10 submissions of an existing subreddit. \
-The program uses the reddit api through PRAW(Python Reddit API Wrapper). 
+This python program computes the Coleman-Liau Index for all the top comments of a reddit thread and generates a report.txt indicating the average Coleman-Liau Index of all top comments, along with, the Coleman-Liau Index of the submission title. The program is able to run on either a single reddit link, multiple reddit links stored in a text file, or finding the top 10 posts of a given subreddit. The program is able to access reddit through the use of PRAW(Python Reddit API Wrapper). 
 
 To learn more about the Coleman-Liau Index:
 https://en.wikipedia.org/wiki/Coleman%E2%80%93Liau_index
@@ -22,6 +17,11 @@ json
 1. Please ensure you are using Python version 3.6.0 or up.
 2. To install the necessary dependencies, run the following in CMD or terminal: ```pip install -r requirements.txt ```
 3. Please setup praw before running the program through the following link: https://praw.readthedocs.io/en/latest/getting_started/authentication.html#oauth 
+4. When running the program, it will prompt from the following 3 options: \
+ A. Checking the Coleman-Liau Index of all top comments from a given reddit link.\
+ B. Checking the Coleman-Liau Index of all top comments through a text file containing reddit links, separated by newline. This file is named 'threads.txt'. \
+ C. Finding the Coleman-Liau Index of all top comments from the top 10 submissions of an existing subreddit. \
+5. The program 
  
 
 ### Features
