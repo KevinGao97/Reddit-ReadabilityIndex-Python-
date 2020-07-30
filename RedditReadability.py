@@ -178,6 +178,12 @@ def main():
     try:
         with open("credentials.json") as fp:
             params = json.load(fp)
+        try:
+            with open("./credentials.json") as fp:
+                params = json.load(fp)
+        except FileNotFoundError:
+            print("The credentials.json file could not be found.")
+            exit(1)
     except FileNotFoundError:
         print("The credentials.json file could not be found.")
         exit(1)
